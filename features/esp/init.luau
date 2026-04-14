@@ -4,12 +4,12 @@ local ReplicationInterface = shared.require("ReplicationInterface")
 local Players = game:GetService("Players")
 local Camera = workspace.CurrentCamera
 
-function ESP.Init()
+ESP.Init = function()
     ESP.Connection = Players.PlayerRemoving:Connect(ESP.RemoveCache)
     ESP.DrawCache = {}
 end
 
-function ESP.Drawing(Class, Properties)
+ESP.Drawing = function(Class, Properties)
     local DrawObject = Drawing.new(Class)
 
     for i,v in Properties do
@@ -19,7 +19,7 @@ function ESP.Drawing(Class, Properties)
     return DrawObject
 end
 
-function ESP.CreateCache(Player)
+ESP.CreateCache = function(Player)
     ESP.DrawCache[Player] = {
         Box = ESP.Drawing("Square", {ZIndex = 2, Visible = false, Color = Color3.new(1, 1, 1)}),
         Outline = ESP.Drawing("Square", {ZIndex = 1, Visible = false, Thickness = 3, Transparency = 0.5, Color = Color3.new()}),
@@ -28,7 +28,7 @@ function ESP.CreateCache(Player)
     return ESP.DrawCache[Player]
 end
 
-function ESP.HideCache(Player)
+ESP.HideCache = function(Player)
     local Cache = ESP.DrawCache[Player]
     if not Cache then
         return
@@ -39,7 +39,7 @@ function ESP.HideCache(Player)
     end
 end
 
-function ESP.RemoveCache(Player)
+ESP.RemoveCache = function(Player)
     local Cache = ESP.DrawCache[Player]
     if not Cache then
         return
@@ -55,7 +55,7 @@ local CornerOffsets = {
     Vector3.new(1, -1, -1), Vector3.new(1, -1, 1), Vector3.new(1, 1, -1), Vector3.new(1, 1, 1),
 }
 
-function ESP.CalculateBox(ThirdPersonObject)
+ESP.CalculateBox = function(ThirdPersonObject)
     local MinX, MinY = math.huge, math.huge
     local MaxX, MaxY = -math.huge, -math.huge
 
@@ -84,7 +84,7 @@ function ESP.CalculateBox(ThirdPersonObject)
     }
 end
 
-function ESP.Update()
+ESP.Update = function()
     ReplicationInterface.operateOnAllEntries(function(Player, Entry)
         if not Entry:isAlive() or not Entry:isEnemy() then
             return ESP.HideCache(Player)
@@ -113,7 +113,7 @@ function ESP.Update()
     end)
 end
 
-function ESP.Cleanup()
+ESP.Cleanup = function()
     ESP.Connection:Disconnect()
 
     for _, Player in Players:GetPlayers() do
