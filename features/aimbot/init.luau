@@ -5,7 +5,7 @@ local CharacterInterface = shared.require("CharacterInterface")
 local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 
-function Aimbot.Init()
+Aimbot.Init = function()
     local Circle = Aimbot.Drawing("Circle", {
         Visible = true,
         ZIndex = 4,
@@ -25,7 +25,7 @@ function Aimbot.Init()
     Aimbot.Render = {Circle, Outline}
 end
 
-function Aimbot.Drawing(Class, Properties)
+Aimbot.Drawing = function(Class, Properties)
     local DrawObject = Drawing.new(Class)
 
     for i,v in Properties do
@@ -35,7 +35,7 @@ function Aimbot.Drawing(Class, Properties)
     return DrawObject
 end
 
-function Aimbot.GetTarget()
+Aimbot.GetTarget = function()
     local Target, Max = nil, 180
     local MouseLocation = UserInputService:GetMouseLocation()
 
@@ -71,7 +71,7 @@ function Aimbot.GetTarget()
     return Target
 end
 
-function Aimbot.Update()
+Aimbot.Update = function()
     local KeybindDown = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
     local Target = KeybindDown and Aimbot.GetTarget()
     local MouseLocation = UserInputService:GetMouseLocation()
@@ -86,7 +86,7 @@ function Aimbot.Update()
     end
 end
 
-function Aimbot.Cleanup()
+Aimbot.Cleanup = function()
     for _, DrawObject in Aimbot.Render do
         DrawObject:Remove()
     end
